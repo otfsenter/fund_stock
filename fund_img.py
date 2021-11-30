@@ -3,8 +3,6 @@ import pandas as pd
 import requests
 import io
 
-from PIL import Image
-
 url_fund = 'http://hq.sinajs.cn/list=f_%s'
 
 fund_codes = [
@@ -31,7 +29,7 @@ def style_negative(v):
         return None
 
 
-def main():
+def data2buffer():
     data_list = []
     for i in fund_codes:
         response = requests.get(url_fund % i).text
@@ -47,14 +45,14 @@ def main():
     f = io.BytesIO()
     dfi.export(s, f)
     f.seek(0)  # 从头开始读，不然数据不完整
-
+    return f
     # 展示用
-    im = Image.open(f)
-    im.show()
+    # im = Image.open(f)
+    # im.show()
 
     # 关闭buffer
-    f.close()
+    # f.close()
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     data2buffer()
