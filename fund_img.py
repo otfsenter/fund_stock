@@ -1,6 +1,9 @@
 import dataframe_image as dfi
 import pandas as pd
 import requests
+import io
+
+from PIL import Image
 
 url_fund = 'http://hq.sinajs.cn/list=f_%s'
 
@@ -39,7 +42,18 @@ def main():
 
     df = pd.DataFrame(data=data_list, columns=head)
     s = df.style.applymap(style_negative, subset="跌/涨")
-    dfi.export(s, "mytable.png")
+
+    # 用dataframe_image把dataframe的数据写入内存
+    f = io.BytesIO()
+    dfi.export(s, f)
+    f.seek(0)  # 从头开始读，不然数据不完整
+
+    # 展示用
+    im = Image.open(f)
+    im.show()
+
+    # 关闭buffer
+    f.close()
 
 
 if __name__ == '__main__':
